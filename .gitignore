@@ -1,0 +1,49 @@
+# ========================
+# Variables de entorno
+# ========================
+.env
+.env.*
+!.env.example
+
+# ========================
+# Dependencias
+# ========================
+node_modules/
+
+# ========================
+# Logs
+# ========================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ========================
+# Build / compilados
+# ========================
+dist/
+build/
+
+# ========================
+# Cobertura de tests
+# ========================
+coverage/
+
+# ========================
+# IDE y editor
+# ========================
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ========================
+# Sistema operativo
+# ========================
+.DS_Store
+Thumbs.db

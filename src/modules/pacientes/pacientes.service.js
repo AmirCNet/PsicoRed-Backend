@@ -1,15 +1,22 @@
 const supabase = require('../../db/supabaseClient')
+const profesionalesService = require('../profesionales/profesionales.service')
 
 const getAll = async (usuarioId, rolUsuario) => {
   let query = supabase
     .from('pacientes')
     .select('*')
-    .neq('estado', 'inactivo')
     .order('apellido', { ascending: true })
 
-  // Los profesionales solo ven sus pacientes (los que ellos crearon)
+  // Admin ve TODOS los pacientes sin filtro de estado
   if (rolUsuario === 'profesional') {
-    query = query.eq('creado_por', usuarioId)
+    const perfil = await profesionalesService.getByUsuarioId(usuarioId)
+    if (!perfil) {
+      return []
+    }
+
+    query = query
+      .eq('profesional_id', perfil.id)
+      .eq('estado', 'activo')
   }
 
   const { data, error } = await query

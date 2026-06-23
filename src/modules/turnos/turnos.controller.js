@@ -9,7 +9,7 @@ const getAll = async (req, res) => {
       fecha_desde:    req.query.fecha_desde,
       fecha_hasta:    req.query.fecha_hasta
     }
-    res.json(await turnosService.getAll(filters))
+    res.json(await turnosService.getAll(filters, req.user.id, req.user.rol))
   } catch (err) {
     res.status(500).json({ error: err.message })
   }

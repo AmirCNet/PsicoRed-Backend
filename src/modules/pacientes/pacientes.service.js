@@ -1,5 +1,4 @@
 const supabase = require('../../db/supabaseClient')
-const profesionalesService = require('../profesionales/profesionales.service')
 
 const getAll = async (usuarioId, rolUsuario) => {
   let query = supabase
@@ -9,14 +8,7 @@ const getAll = async (usuarioId, rolUsuario) => {
 
   // Admin ve TODOS los pacientes sin filtro de estado
   if (rolUsuario === 'profesional') {
-    const perfil = await profesionalesService.getByUsuarioId(usuarioId)
-    if (!perfil) {
-      return []
-    }
-
-    query = query
-      .eq('profesional_id', perfil.id)
-      .eq('estado', 'activo')
+    query = query.eq('estado', 'activo')
   }
 
   const { data, error } = await query

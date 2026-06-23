@@ -19,8 +19,12 @@ const getById = async (req, res) => {
 const create = async (req, res) => {
   try {
     const { nombre, apellido, email, telefono, direccion } = req.body
-    if (!nombre || !apellido || !email || !telefono || !direccion) {
-      return res.status(400).json({ error: 'Todos los campos son requeridos' })
+    if (!nombre || !apellido || !email || !telefono) {
+      return res.status(400).json({ error: 'Nombre, apellido, email y teléfono son requeridos' })
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: 'El correo electrónico no es válido' })
     }
     res.status(201).json(await pacientesService.create(req.body, req.user.id))
   } catch (err) {

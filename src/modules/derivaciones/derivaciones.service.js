@@ -36,6 +36,20 @@ const getById = async (id) => {
 }
 
 const create = async (body, usuarioId) => {
+  // Validar si ya existe una derivación activa (pendiente o aceptada) para esta misma pareja
+  const { data: existente, error: checkError } = await supabase
+    .from('derivaciones')
+    .select('id')
+    .eq('paciente_id', body.paciente_id)
+    .eq('profesional_id', body.profesional_id)
+    .in('estado', ['pendiente', 'aceptada'])
+    .maybeSingle()
+
+  if (checkError) throw checkError
+  if (existente) {
+    throw new Error('El paciente ya tiene una derivación pendiente o activa con este profesional')
+  }
+
   const { data, error } = await supabase
     .from('derivaciones')
     .insert({ ...body, derivado_por: usuarioId })

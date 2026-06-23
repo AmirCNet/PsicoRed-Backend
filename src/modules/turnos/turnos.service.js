@@ -1,6 +1,7 @@
 const supabase = require('../../db/supabaseClient')
+const profesionalesService = require('../profesionales/profesionales.service')
 
-const getAll = async (filters = {}) => {
+const getAll = async (filters = {}, usuarioId, rolUsuario) => {
   let query = supabase
     .from('turnos')
     .select(`
@@ -11,6 +12,12 @@ const getAll = async (filters = {}) => {
       creado_por_usuario:usuarios!turnos_creado_por_fkey(id, email)
     `)
     .order('fecha_hora', { ascending: true })
+
+  if (rolUsuario === 'profesional') {
+    const perfil = await profesionalesService.getByUsuarioId(usuarioId)
+    if (!perfil) return []
+    filters.profesional_id = perfil.id
+  }
 
   if (filters.profesional_id) query = query.eq('profesional_id', filters.profesional_id)
   if (filters.paciente_id)    query = query.eq('paciente_id', filters.paciente_id)
@@ -56,9 +63,28 @@ const create = async (body, usuarioId) => {
 }
 
 const update = async (id, cambios) => {
+  const {
+    paciente_id,
+    profesional_id,
+    derivacion_id,
+    fecha_hora,
+    duracion_minutos,
+    estado,
+    notas_sesion
+  } = cambios
+
+  const fieldsToUpdate = {}
+  if (paciente_id !== undefined) fieldsToUpdate.paciente_id = paciente_id
+  if (profesional_id !== undefined) fieldsToUpdate.profesional_id = profesional_id
+  if (derivacion_id !== undefined) fieldsToUpdate.derivacion_id = derivacion_id
+  if (fecha_hora !== undefined) fieldsToUpdate.fecha_hora = fecha_hora
+  if (duracion_minutos !== undefined) fieldsToUpdate.duracion_minutos = duracion_minutos
+  if (estado !== undefined) fieldsToUpdate.estado = estado
+  if (notas_sesion !== undefined) fieldsToUpdate.notas_sesion = notas_sesion
+
   const { data, error } = await supabase
     .from('turnos')
-    .update(cambios)
+    .update(fieldsToUpdate)
     .eq('id', id)
     .select()
     .single()

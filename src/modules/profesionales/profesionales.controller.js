@@ -37,6 +37,13 @@ const create = async (req, res) => {
 
 const update = async (req, res) => {
   try {
+    // Solo el propio profesional o un administrador pueden editar el perfil
+    if (req.user.rol !== 'administrador') {
+      const perfil = await profesionalesService.getById(req.params.id)
+      if (perfil.usuario_id !== req.user.id) {
+        return res.status(403).json({ error: 'No tenés permiso para editar este perfil' })
+      }
+    }
     res.json(await profesionalesService.update(req.params.id, req.body))
   } catch (err) {
     res.status(400).json({ error: err.message })

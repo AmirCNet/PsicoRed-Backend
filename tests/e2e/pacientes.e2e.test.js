@@ -57,7 +57,22 @@ describe('E2E POST /api/pacientes', () => {
     expect(supabase.from).not.toHaveBeenCalled()
   })
 
-  // ── EVE (agrega acá sus tests) ──────────────────────────
-  // it('401 sin token', ...)
-  // it('400 con datos incompletos', ...)
+  it('401 sin token', async () => {
+    const res = await request(app)
+      .post('/api/pacientes')
+      .send({ nombre: 'Juan', apellido: 'Pérez', email: 'juan@mail.com', telefono: '123456' })
+
+    expect(res.status).toBe(401)
+    expect(res.body.error).toBe('Token no proporcionado')
+  })
+
+  it('400 con datos incompletos', async () => {
+    const res = await request(app)
+      .post('/api/pacientes')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ nombre: 'Juan' }) 
+
+    expect(res.status).toBe(400)
+    expect(res.body.error).toBe('Nombre, apellido, email y teléfono son requeridos') 
+  })
 })

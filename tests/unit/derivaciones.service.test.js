@@ -1,13 +1,6 @@
 const derivacionesService = require('../../src/modules/derivaciones/derivaciones.service')
 
-// ── Mock de supabaseClient ─────────────────────────────────────────────────
-// create() hace hasta tres queries sobre la tabla 'derivaciones':
-//   1. Chequeo de duplicado: from().select().eq().eq().in().maybeSingle()
-//   2. Insert:               from().insert().select().single()
-//   3. getById (al final):   from().select().eq().single()
-// Todos los métodos intermedios devuelven el mismo builder (encadenables).
-// Los métodos que cierran la query (maybeSingle y single) son jest.fn()
-// para poder decidir qué devuelve cada uno en cada test.
+// ── Mock de supabaseClient
 jest.mock('../../src/db/supabaseClient', () => {
   const builder = {}
   builder.select = jest.fn(() => builder)
@@ -27,9 +20,7 @@ const mock = supabase._builder
 
 const body = { paciente_id: 'p1', profesional_id: 'pr1', motivo: 'Ansiedad' }
 
-// ═══════════════════════════════════════════════════════════════════════════
 // Test Unitario 3 — derivacionesService.create()
-// ═══════════════════════════════════════════════════════════════════════════
 describe('derivacionesService.create()', () => {
   beforeEach(() => {
     jest.clearAllMocks()

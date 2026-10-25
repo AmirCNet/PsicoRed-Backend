@@ -1,10 +1,6 @@
 const authService = require('../../src/modules/auth/auth.service')
 
-// ── Mock de supabaseClient ─────────────────────────────────────────────────
-// Soporta dos cadenas de query usadas en auth.service.js:
-//   - login/getMe:  from().select().eq().eq().single()
-//   - register:     from().select().eq().single()  (chequeo)
-//                   from().insert().select().single()  (insert)
+// ── Mock de supabaseClient
 jest.mock('../../src/db/supabaseClient', () => {
   const mockSingle = jest.fn()
   const mockEq = jest.fn(() => ({ eq: mockEq, single: mockSingle }))
@@ -17,7 +13,7 @@ jest.mock('../../src/db/supabaseClient', () => {
 
 const supabase = require('../../src/db/supabaseClient')
 
-// ── Mock de bcryptjs ───────────────────────────────────────────────────────
+// ── Mock de bcryptjs
 jest.mock('bcryptjs', () => ({
   compare: jest.fn(),
   hash: jest.fn()
@@ -27,9 +23,7 @@ const bcrypt = require('bcryptjs')
 // Asegurar JWT_SECRET disponible en tests
 process.env.JWT_SECRET = 'test-secret'
 
-// ═══════════════════════════════════════════════════════════════════════════
 // Test Unitario 1 — login()
-// ═══════════════════════════════════════════════════════════════════════════
 describe('authService.login()', () => {
   beforeEach(() => {
     jest.clearAllMocks()
@@ -78,9 +72,7 @@ describe('authService.login()', () => {
   })
 })
 
-// ═══════════════════════════════════════════════════════════════════════════
 // Test Unitario 2 — register()
-// ═══════════════════════════════════════════════════════════════════════════
 describe('authService.register()', () => {
   beforeEach(() => {
     jest.clearAllMocks()

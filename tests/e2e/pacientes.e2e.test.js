@@ -9,8 +9,8 @@ const app = require('../../src/app')
 
 function chain(result) {
   const c = {}
-  ;['select', 'insert', 'update', 'delete', 'eq', 'neq', 'in', 'order', 'limit', 'single', 'maybeSingle']
-    .forEach(m => { c[m] = jest.fn(() => c) })
+    ;['select', 'insert', 'update', 'delete', 'eq', 'neq', 'in', 'order', 'limit', 'single', 'maybeSingle']
+      .forEach(m => { c[m] = jest.fn(() => c) })
   c.then = (resolve, reject) => Promise.resolve(result).then(resolve, reject)
   return c
 }
@@ -25,7 +25,7 @@ describe('E2E POST /api/pacientes', () => {
     supabase.from.mockReset()
   })
 
-  // ── KIARA ───────────────────────────────────────────────
+
   it('201 con todos los datos válidos (recorre todas las capas)', async () => {
     const q = chain({
       data: { id: 10, nombre: 'Juan', apellido: 'Pérez', email: 'juan@mail.com', telefono: '123456', estado: 'activo' },
@@ -70,9 +70,9 @@ describe('E2E POST /api/pacientes', () => {
     const res = await request(app)
       .post('/api/pacientes')
       .set('Authorization', `Bearer ${token}`)
-      .send({ nombre: 'Juan' }) 
+      .send({ nombre: 'Juan' })
 
     expect(res.status).toBe(400)
-    expect(res.body.error).toBe('Nombre, apellido, email y teléfono son requeridos') 
+    expect(res.body.error).toBe('Nombre, apellido, email y teléfono son requeridos')
   })
 })

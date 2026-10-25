@@ -7,8 +7,8 @@ const pacientesService = require('../../src/modules/pacientes/pacientes.service'
 // Simula la cadena .from().insert().select().single() de Supabase
 function chain(result) {
   const c = {}
-  ;['select', 'insert', 'update', 'delete', 'eq', 'neq', 'in', 'order', 'limit', 'single', 'maybeSingle']
-    .forEach(m => { c[m] = jest.fn(() => c) })
+    ;['select', 'insert', 'update', 'delete', 'eq', 'neq', 'in', 'order', 'limit', 'single', 'maybeSingle']
+      .forEach(m => { c[m] = jest.fn(() => c) })
   c.then = (resolve, reject) => Promise.resolve(result).then(resolve, reject)
   return c
 }

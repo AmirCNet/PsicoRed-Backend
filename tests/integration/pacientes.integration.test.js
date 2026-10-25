@@ -35,9 +35,7 @@ const pacienteValido = {
   telefono: '1122334455'
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-// Test de Integración 2 — POST /api/pacientes
-// ═══════════════════════════════════════════════════════════════════════════
+// Test POST /api/pacientes
 describe('POST /api/pacientes', () => {
   beforeEach(() => {
     jest.clearAllMocks()

@@ -11,6 +11,14 @@ app.use(cors({
   origin: ['http://localhost:5173', 'http://localhost:3000'],
   credentials: true
 }))
+app.use(helmet())
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false
+})
+app.use(limiter)
 app.use(express.json())
 
 // ── Health check ─ Para saber si el servidor está funcionando correctamente ──
